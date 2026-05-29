@@ -43,10 +43,30 @@ module TX (
                     end
                 end
                 DATA: begin
-                    
+                    tx <= shift_reg[0];
+                    if (baud_count < (CLKS -1)) begin
+                        baud_count <= baud_count+1;
+                    end else begin
+                        baud_count <= 0;
+                        shift_reg <= shift_reg>>1;
+                        if (bit_count == 7) begin
+                            bit_count <= 0;
+                            state <= STOP;
+                        end else begin
+                            bit_count <= bit_count +1;
+                            
+                        end
+                    end
                 end
                 STOP: begin
-                    
+                    tx <= 1;
+                    if (baud_count < (CLKS -1)) begin
+                        baud_count <= baud_count+1;
+                    end else begin
+                        baud_count <= 0;
+                        busy <= 0;
+                        state <= IDLE;
+                    end
                 end 
             endcase
         end
