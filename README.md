@@ -121,7 +121,20 @@ Expected output:
 ```
 TX sent: a5 | RX received: a5
 ```
+## Verification with Synopsys VCS
 
+In addition to Icarus Verilog, the integration testbench was verified using **Synopsys VCS (X-2025.06)** on a university EDA server.
+
+```bash
+vcs -full64 UartTX.v UartRX.v tbModUart.v -o simv
+./simv
+```
+
+Result confirms full TX → RX data integrity:
+
+```
+TX sent: a5 | RX received: a5
+```
 ## UART Frame Format
 
 ```
