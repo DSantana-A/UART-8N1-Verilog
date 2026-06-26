@@ -27,7 +27,7 @@ module tbModUart();
 
         @(posedge ready);
         #100;
-        $display("TX envio: %h | RX recibio: %h", 8'hA5, dataOut);
+        $display("TX sent: %h | RX received: %h", 8'hA5, dataOut);
         $finish;
 
     end

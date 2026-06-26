@@ -121,6 +121,7 @@ Expected output:
 ```
 TX sent: a5 | RX received: a5
 ```
+
 ## Verification with Synopsys VCS
 
 In addition to Icarus Verilog, the integration testbench was verified using **Synopsys VCS (X-2025.06)** on a university EDA server.
@@ -135,6 +136,50 @@ Result confirms full TX → RX data integrity:
 ```
 TX sent: a5 | RX received: a5
 ```
+
+## Logic Synthesis with Synopsys Design Compiler
+
+The transmitter was synthesized using **Synopsys Design Compiler (X-2025.06-SP1)** targeting the **SAED 32nm** educational standard cell library (HVT, 0.75 V, 125 °C corner) at a 50 MHz clock target.
+
+```bash
+dc_shell -f synth_uart.tcl
+```
+
+### Area
+
+| Metric | Value |
+|--------|-------|
+| Total cells | 111 |
+| Combinational cells | 82 |
+| Sequential cells | 28 |
+| Nets | 162 |
+| Buffers / inverters | 10 |
+
+### Timing
+
+| Metric | Value |
+|--------|-------|
+| Clock target | 50 MHz (20 ns period) |
+| Data arrival time | 15.49 ns |
+| Data required time | 18.44 ns |
+| **Slack** | **+2.95 ns (MET)** |
+| Estimated max frequency | ~58 MHz |
+
+The critical path runs through the baud rate counter (`baud_count_reg`), as expected for a wide incrementer chain.
+
+### Power (0.75 V, 125 °C)
+
+| Component | Power | Share |
+|-----------|-------|-------|
+| Clock network | 4.11 µW | 66.4% |
+| Registers | 1.58 µW | 25.5% |
+| Combinational | 0.50 µW | 8.1% |
+| **Total dynamic** | **4.31 µW** | — |
+| **Cell leakage** | **1.87 µW** | — |
+| **Total** | **6.18 µW** | — |
+
+The clock network dominates power consumption, which is typical for sequential designs and a candidate for clock gating optimization.
+
 ## UART Frame Format
 
 ```
