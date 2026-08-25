@@ -1,16 +1,14 @@
-# UART in Verilog
+# UART in SystemVerilog
 
-UART (Universal Asynchronous Receiver-Transmitter) implementation in Verilog using finite state machines. Configured for **9600 baud** at a **50 MHz** clock (8N1: 8 data bits, no parity, 1 stop bit).
+UART (Universal Asynchronous Receiver-Transmitter) implementation in SystemVerilog using finite state machines. Configured for **9600 baud** at a **50 MHz** clock (8N1: 8 data bits, no parity, 1 stop bit).
 
 ## Project Structure
 
 ```
 UART/
-├── UartTX.v       - Transmitter module
-├── UartRX.v       - Receiver module
-├── tbUartTX.v     - TX testbench
-├── tbUartRX.v     - RX testbench
-└── tbModUart.v    - Integration testbench (TX + RX)
+├── UartTX.sv      - Transmitter module
+├── UartRX.sv      - Receiver module
+└── tbModUart.sv   - Integration testbench (TX + RX)
 ```
 
 ## Configuration
@@ -29,7 +27,7 @@ CLKS = clk_frequency / baud_rate
 
 ## Modules
 
-### TX — Transmitter (`UartTX.v`)
+### TX — Transmitter (`UartTX.sv`)
 
 Serializes a byte and transmits it over the `tx` line, LSB first.
 
@@ -57,7 +55,7 @@ IDLE → START → DATA (x8) → STOP → IDLE
 
 ---
 
-### RX — Receiver (`UartRX.v`)
+### RX — Receiver (`UartRX.sv`)
 
 Detects an incoming UART frame on the `rx` line and reconstructs the byte.
 
@@ -93,26 +91,10 @@ brew install icarus-verilog
 brew install --cask gtkwave
 ```
 
-### Run TX testbench
-
-```bash
-iverilog -o TXSIM UartTX.v tbUartTX.v
-./TXSIM
-gtkwave UartTX.vcd
-```
-
-### Run RX testbench
-
-```bash
-iverilog -o RXSIM UartRX.v tbUartRX.v
-./RXSIM
-gtkwave UartRX.vcd
-```
-
 ### Run integration testbench
 
 ```bash
-iverilog -o UartSIM UartTX.v UartRX.v tbModUart.v
+iverilog -g2012 -o UartSIM UartTX.sv UartRX.sv tbModUart.sv
 ./UartSIM
 gtkwave Uart.vcd
 ```
@@ -127,7 +109,7 @@ TX sent: a5 | RX received: a5
 In addition to Icarus Verilog, the integration testbench was verified using **Synopsys VCS (X-2025.06)** on a university EDA server.
 
 ```bash
-vcs -full64 UartTX.v UartRX.v tbModUart.v -o simv
+vcs -full64 -sverilog UartTX.sv UartRX.sv tbModUart.sv -o simv
 ./simv
 ```
 
