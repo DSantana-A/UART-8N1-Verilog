@@ -1,20 +1,23 @@
 module RX (
-    input clk, reset, rx,
-    output reg [7:0] data,
-    output  reg ready
+    input logic clk, reset, rx,
+    output logic [7:0] data,
+    output logic ready
 );
-    
-    parameter IDLE = 2'b00;
-    parameter START = 2'b01;
-    parameter DATA = 2'b10;
-    parameter STOP = 2'b11;
-    parameter CLKS = 5208;
 
-    reg [1:0] state;
-    reg [12:0] baud_count;
-    reg [2:0] bit_count;
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        START = 2'b01,
+        DATA  = 2'b10,
+        STOP  = 2'b11
+    } state_t;
 
-    always @(posedge clk ) begin
+    localparam int CLKS = 5208;
+
+    state_t      state;
+    logic [12:0] baud_count;
+    logic [2:0]  bit_count;
+
+    always_ff @(posedge clk) begin
         if (reset) begin
             data <= 0;
             ready <= 0;
@@ -63,10 +66,10 @@ module RX (
                     ready <= 1;
                     state <= IDLE;
                 end
-             end 
+             end
             endcase
         end
-        
+
     end
 
 endmodule

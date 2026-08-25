@@ -1,10 +1,10 @@
 `timescale 1ns/1ps
 
 module tbModUart();
-    reg clk, reset, start;
-    reg [7:0] dataIn;
-    wire [7:0] dataOut;
-    wire txLine, busy, ready;
+    logic clk, reset, start;
+    logic [7:0] dataIn;
+    logic [7:0] dataOut;
+    logic txLine, busy, ready;
 
     always #10 clk = ~clk;
 

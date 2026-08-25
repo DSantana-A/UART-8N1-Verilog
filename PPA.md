@@ -1,11 +1,11 @@
 # UART Transmitter — Synthesis Report
 
-**Design:** UART Transmitter (8N1)
-**Language:** Verilog RTL
-**Synthesis Tool:** Synopsys Design Compiler X-2025.06-SP1
-**Technology:** SAED 32nm (HVT standard cells)
-**Operating Conditions:** 0.75 V, 125 °C (ss corner — worst case)
-**Clock Target:** 50 MHz (20 ns period)
+Design: UART Transmitter (8N1)
+Language: SystemVerilog RTL
+Synthesis Tool: Synopsys Design Compiler X-2025.06-SP1
+Technology: SAED 32nm (HVT standard cells)
+Operating Conditions: 0.75 V, 125 °C (ss corner — worst case)
+Clock Target: 50 MHz (20 ns period)
 
 ---
 
@@ -33,10 +33,10 @@ counter, the bit counter, and the data shift register.
 | Data arrival time | 15.49 ns |
 | Data required time | 18.44 ns |
 | Library setup time | 1.56 ns |
-| **Slack** | **+2.95 ns (MET)** |
+| Slack | +2.95 ns (MET) |
 | Estimated max frequency | ~58 MHz |
 
-**Critical path:** runs from `baud_count_reg[1]` through the baud rate counter's
+Critical path: runs from `baud_count_reg[1]` through the baud rate counter's
 incrementer chain (Half Adder cells) to `baud_count_reg[12]`. This is expected,
 as the wide counter's carry chain is the slowest combinational path in the design.
 
@@ -54,13 +54,13 @@ as the wide counter's carry chain is the slowest combinational path in the desig
 |---------|-------|
 | Cell internal power | 4.22 µW (98%) |
 | Net switching power | 92.4 nW (2%) |
-| **Total dynamic power** | **4.31 µW** |
-| **Cell leakage power** | **1.87 µW** |
-| **Total power** | **6.18 µW** |
+| Total dynamic power | 4.31 µW |
+| Cell leakage power | 1.87 µW |
+| Total power | 6.18 µW |
 
 \* Leakage values in pW as reported by the tool.
 
-**Observation:** The clock network dominates total power consumption at 66.4%,
+Observation: The clock network dominates total power consumption at 66.4%,
 which is typical for sequential designs where the clock toggles continuously
 across all flip-flops. This makes clock gating the primary optimization target
 for reducing power, since the transmitter is idle most of the time.

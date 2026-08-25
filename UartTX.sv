@@ -1,20 +1,23 @@
 module TX (
-    input [7:0] data,
-    input clk, reset, start,
-    output reg tx, busy
+    input  logic [7:0] data,
+    input  logic       clk, reset, start,
+    output logic       tx, busy
 );
-    parameter  IDLE =  2'b00;
-    parameter START = 2'b01;
-    parameter DATA = 2'b10;
-    parameter STOP = 2'b11;
-    parameter CLKS = 5208;
-    
-    reg [1:0] state;
-    reg [12:0] baud_count;
-    reg [2:0] bit_count;
-    reg [7:0] shift_reg;
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        START = 2'b01,
+        DATA  = 2'b10,
+        STOP  = 2'b11
+    } state_t;
 
-    always @(posedge clk ) begin
+    localparam int CLKS = 5208;
+
+    state_t      state;
+    logic [12:0] baud_count;
+    logic [2:0]  bit_count;
+    logic [7:0]  shift_reg;
+
+    always_ff @(posedge clk) begin
         if (reset) begin
             tx <= 1;
             busy <= 0;
@@ -31,7 +34,7 @@ module TX (
                         baud_count <= 0;
                         bit_count <= 0;
                         state <= START;
-                    end 
+                    end
                 end
                 START: begin
                     tx <= 0;
@@ -54,7 +57,7 @@ module TX (
                             state <= STOP;
                         end else begin
                             bit_count <= bit_count +1;
-                            
+
                         end
                     end
                 end
@@ -67,7 +70,7 @@ module TX (
                         busy <= 0;
                         state <= IDLE;
                     end
-                end 
+                end
             endcase
         end
     end
