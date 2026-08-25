@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module RX (
     input logic clk, reset, rx,
     output logic [7:0] data,

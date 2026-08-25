@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module TX (
     input  logic [7:0] data,
     input  logic       clk, reset, start,
